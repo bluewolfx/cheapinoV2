@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "config.h"
 #include "quantum.h"
 #include "debounce.h"
-#include "encoder.h"
+#include "cheapino_encoder.h"
 #include "ghosting.h"
 #include "print.h"
 

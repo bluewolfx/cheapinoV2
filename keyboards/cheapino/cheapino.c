@@ -45,27 +45,19 @@ void keyboard_post_init_user(void) {
 // Make the builtin RGB led show different colors per layer:
 uint8_t get_hue(uint8_t layer) {
     switch (layer) {
-        case 6:
-            return 169;
-        case 5:
-            return 43;
-        case 4:
-            return 85;
-        case 3:
-            return 120;
-        case 2:
-            return 180;
-        case 1:
-            return 220;
-        default:
-            return 0;
+        case 0: return 170; // Blue       - default QWERTY
+        case 1: return 213; // Purple     - symbols
+        case 2: return 0;   // Red        - mouse (toggle, hard to miss)
+        case 3: return 85;  // Green      - numpad
+        case 4: return 64;  // Chartreuse - reserved
+        case 5: return 43;  // Yellow     - reserved
+        case 6: return 128; // Cyan       - Colemak
+        case 7: return 21;  // Orange     - alt layout
+        default: return 170;
     }
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-    uint8_t sat = rgblight_get_sat();
-    uint8_t val = rgblight_get_val();
-    uint8_t hue = get_hue(get_highest_layer(state));
-    rgblight_sethsv(hue, sat, val);
+    rgblight_sethsv(get_hue(get_highest_layer(state)), 230, 70);
     return state;
 }
