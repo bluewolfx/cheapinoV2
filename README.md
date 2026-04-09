@@ -4,7 +4,16 @@ My QMK firmware configurations for the cheapinoV2 split keyboard.
 
 ## Current Configuration
 
-**Last Updated:** 2026-03-26
+**Last Updated:** 2026-04-03
+
+## Changelog
+
+### 2026-04-03 - README and Workflow Update
+- Updated directory structure to include `keymaps/vial/` keymap
+- Updated flashing instructions to reflect Windows QMK MSYS as primary build environment
+- Documented WSL as backup/source-of-truth for keyboard source files
+
+### 2026-03-26 - Initial Repository Setup
 
 ### Features
 
@@ -55,18 +64,34 @@ cheapinoV2/
 │   ├── matrix.c                            # Custom matrix scan (diodeless design)
 │   ├── ghosting.c/h                        # Ghost key suppression
 │   ├── halconf.h / mcuconf.h               # RP2040 HAL overrides
-│   └── keymaps/default/
-│       └── keymap.json                     # QMK Configurator keymap (default)
+│   └── keymaps/
+│       ├── default/
+│       │   └── keymap.json                 # QMK Configurator keymap (default)
+│       └── vial/
+│           ├── keymap.c                    # Vial keymap source
+│           ├── config.h                    # Vial UID + settings
+│           ├── rules.mk                    # Vial build options
+│           └── vial.json                   # Vial keyboard layout definition
 └── vial/
-    └── cheapino.json                       # Vial export (personal layout)
+    └── cheapino.json                       # Vial layout export (personal layout backup)
 ```
 
 ## Flashing Firmware
 
-### Setup QMK (one-time)
+### Primary Workflow — Windows QMK MSYS
+
+The main build environment is **QMK MSYS on Windows**. The `cheapinoV2/` directory in WSL is a backup of the source files.
+
+To use the cheapino keyboard source, copy `keyboards/cheapino/` into your `qmk_firmware` (or `vial-qmk`) keyboards directory:
+```bash
+# From WSL, copy to Windows vial-qmk
+cp -r ~/cheapinoV2/keyboards/cheapino /mnt/c/Users/ricar/vial-qmk/keyboards/
+```
+
+### Setup QMK Base (one-time, from QMK MSYS)
 
 ```bash
-# Inside qmk_firmware folder:
+# Inside qmk_firmware folder — add the tompi fork that has cheapino support:
 git remote add tompi https://github.com/tompi/qmk_firmware
 git fetch tompi cheapinov2
 git checkout tompi/cheapinov2
@@ -76,8 +101,8 @@ git checkout tompi/cheapinov2
 
 ```bash
 qmk flash -kb cheapino -km default
-# or for a custom keymap:
-qmk flash -kb cheapino -km <keymap_name>
+# or for the Vial keymap:
+qmk flash -kb cheapino -km vial
 ```
 
 When QMK says "Waiting for drive to deploy", hold **BOOT** and press **RESET** on the RP2040-Zero to enter DFU mode.
